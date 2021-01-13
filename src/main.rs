@@ -41,7 +41,9 @@ fn main() {
             get_size_str(total),
             get_size_str(free)
         );
-    } else if matches.is_present("name") {
+        return;
+    }
+    if matches.is_present("name") {
         if let (Some(name), Some(version), Some(host_name)) =
             (sys.get_name(), sys.get_version(), sys.get_host_name())
         {
@@ -50,5 +52,6 @@ fn main() {
                 "os_name:", name, version, host_name
             );
         }
+        return;
     }
 }
