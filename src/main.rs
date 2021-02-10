@@ -1,17 +1,8 @@
 use clap::{App, Arg};
 use sysinfo::{System, SystemExt};
 
-const SIZE_UNIT: f64 = 1024.0;
-
-fn get_size_str(mut val: f64) -> String {
-    for suffix in ["KB", "MB", "GB"].iter() {
-        if val < SIZE_UNIT {
-            return format!("{:.2}{}", val, suffix);
-        }
-        val /= SIZE_UNIT;
-    }
-    format!("{:.2}TB", val)
-}
+mod utils;
+use utils::{get_size_str, get_time_show};
 
 fn main() {
     let mut sys = System::new();
@@ -29,6 +20,12 @@ fn main() {
                 .short("n")
                 .long("name")
                 .help("Get name message"),
+        )
+        .arg(
+            Arg::with_name("up_time")
+                .short("u")
+                .long("up_time")
+                .help("Get up time"),
         )
         .get_matches();
     if matches.is_present("memory") {
@@ -52,6 +49,10 @@ fn main() {
                 "os_name:", name, version, host_name
             );
         }
+        return;
+    }
+    if matches.is_present("up_time") {
+        println!("{}", get_time_show(sys.get_uptime()));
         return;
     }
 }
